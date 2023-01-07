@@ -1,4 +1,2 @@
 # Algorithm
-baekjoon, codeit, ...etc
-
-## baekjoon Algorithm
+baekjoon, Yuclid Algorithm, ...etc
