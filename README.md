@@ -1,2 +1,2 @@
 # Algorithm
-baekjoon, Yuclid Algorithm, ...etc
+baekjoon, Programmers i solved
