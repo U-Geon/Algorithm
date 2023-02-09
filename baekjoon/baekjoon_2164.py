@@ -5,6 +5,7 @@ deq = deque([i for i in range(1, n+1)])
 
 while len(deq) > 1:
     deq.popleft()
-    deq.append(deq.popleft())
+    a = deq.popleft()
+    deq.append(a)
 
 print(deq[0])
