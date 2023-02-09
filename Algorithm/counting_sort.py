@@ -8,6 +8,7 @@ def counting_sort_no1(arr):
     for i in range(max(arr)+1): # 오름차순으로 각 개수대로 출력
         for j in range(count[i]):
             result.append(i)
+    return result
 
 
 def counting_sort_no2(arr):
