@@ -1,0 +1,20 @@
+import java.util.*;
+
+class Solution {
+    public String solution(String s) {
+        StringTokenizer st = new StringTokenizer(s.toLowerCase(), " ", true);
+        StringBuilder sb = new StringBuilder();
+        
+        while(st.hasMoreTokens()) {
+            String word = st.nextToken();
+			if (word.equals(" "))
+				sb.append(word);
+			else {
+				sb.append(word.substring(0, 1).toUpperCase() + word.substring(1));
+			}
+
+        }
+
+        return sb.toString();
+    }
+}
