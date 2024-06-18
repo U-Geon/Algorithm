@@ -20,7 +20,7 @@ result = tmp[0]
 for i in tmp:
     result = gcd(result, i)
 
-# 최대공약수 간격의 전체 나무 개수
+# 각 간격을 최대 공약수로 나누고 -1을 빼줘야 함 (양끝에 심어져 있음)
 count = 0
 for i in tmp:
     count += i // result - 1
