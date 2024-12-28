@@ -1,73 +1,74 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
-// 1753 최단경로
-class Edge implements Comparable<Edge>{
-    int v, w;
-    public Edge(int v, int w) {
-        this.v = v;
-        this.w = w;
+class Node implements Comparable<Node> {
+    int target, weight;
+
+    public Node(int target, int weight) {
+        this.target = target;
+        this.weight = weight;
     }
+
     @Override
-    public int compareTo(Edge other) {
-        if(this.w != other.w) {
-            return Integer.compare(this.w, other.w);
+    public int compareTo(Node o) {
+        if(this.weight != o.weight) {
+            return Integer.compare(this.weight, o.weight);
         }
         return 0;
     }
 }
 
 public class Main {
+
+    static int v,e,k;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine().strip());
 
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int vCount = Integer.parseInt(st.nextToken());
-        int eCount = Integer.parseInt(st.nextToken());
-        st = new StringTokenizer(br.readLine());
-        int startNum = Integer.parseInt(st.nextToken());
+        v = Integer.parseInt(st.nextToken());
+        e = Integer.parseInt(st.nextToken());
+        k = Integer.parseInt(br.readLine());
 
-        int visited[] = new int[vCount+1];
-        int distance[] = new int[vCount+1];
-        ArrayList<Edge> edges[] = new ArrayList[vCount + 1];
-        PriorityQueue<Edge> edgeQueue = new PriorityQueue<>();
-        
-        for (int i = 1; i < vCount + 1; i++) {
-            distance[i] = Integer.MAX_VALUE;
-            visited[i] = -1;
-            edges[i] = new ArrayList<Edge>();
+        ArrayList<ArrayList<Node>> nodes = new ArrayList<>();
+        for (int i = 0; i < v+1; i++) {
+            nodes.add(new ArrayList<>());
         }
 
-        for (int i=0; i < eCount; i++) {
-            st = new StringTokenizer(br.readLine());
+        int[] distance = new int[v+1];
+        boolean[] visited = new boolean[v+1];
+
+        Arrays.fill(distance, Integer.MAX_VALUE);
+
+        distance[k] = 0;
+        visited[k] = true;
+
+        for (int i = 0; i < e; i++) {
+            st = new StringTokenizer(br.readLine().strip());
             int u = Integer.parseInt(st.nextToken());
             int v = Integer.parseInt(st.nextToken());
             int w = Integer.parseInt(st.nextToken());
-            edges[u].add(new Edge(v, w));
+
+            nodes.get(u).add(new Node(v,w));
         }
 
-        distance[startNum] = 0;
-        edgeQueue.add(new Edge(startNum, 0));
-        
-        while(!edgeQueue.isEmpty()) {
-            Edge minNode = edgeQueue.poll();
-            visited[minNode.v] = minNode.v;
-            for (int i = 0; i < edges[minNode.v].size(); i++) {
-                Edge e = edges[minNode.v].get(i);
-                if (visited[e.v] != e.v && distance[e.v] > e.w + distance[minNode.v]) {
-                    distance[e.v] = e.w + distance[minNode.v];
-                    edgeQueue.add(new Edge(e.v, distance[e.v]));
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.add(new Node(k,0));
+
+        while(!pq.isEmpty()) {
+            Node poll = pq.poll();
+            ArrayList<Node> target = nodes.get(poll.target);
+            for (int i = 0; i < target.size(); i++) {
+                Node node = target.get(i);
+                if(!visited[node.target] && distance[node.target] > node.weight + distance[poll.target]) {
+                    distance[node.target] = node.weight + distance[poll.target];
+                    pq.add(new Node(node.target, distance[node.target]));
                 }
             }
         }
 
-        for (int i=1; i < vCount+1; i++) {
-            if(distance[i] == Integer.MAX_VALUE) System.out.println("INF");
-            else System.out.println(distance[i]);
+        for (int i=1; i<distance.length; i++) {
+            System.out.println(distance[i] != Integer.MAX_VALUE ? distance[i] : "INF");
         }
-
-        br.close();
     }
 }
