@@ -9,6 +9,12 @@ public class Main {
     static int maxValue = Integer.MIN_VALUE;
     static int minValue = Integer.MAX_VALUE;
 
+    /**
+     * @param n 수열의 길이
+     * @param end 연산자 백트래킹 끝나는 index
+     * @param index 현재 index
+     */
+
     static void solution(int n, int end, int index) {
         if(index == end) {
             int sum = permutation[0];
@@ -32,13 +38,14 @@ public class Main {
             return ;
         }
 
+        // 연산자 백트래킹
         for (int i = 0; i < n - 1; i++) {
-            if(!visitedOperator[i]) { // 방문하지 않은 노드인 경우
+            if(!visitedOperator[i]) { // 방문하지 않은 연산자인 경우
                 visitedOperator[i] = true;
-                result[index] = operators.get(i); // 해당 인덱스에 대한 노드 선택.
+                result[index] = operators.get(i); // 해당 인덱스에 대한 연산자 선택.
                 solution(n, end, index + 1);
 
-                visitedOperator[i] = false; // 자식 노드 방문 시 방문하지 않은 것으로 변경. (백트래킹)
+                visitedOperator[i] = false; // 상위 노드로 백트래킹 시 방문하지 않은 것으로 변경. (백트래킹)
             }
         }
     }
@@ -47,10 +54,10 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int n = Integer.parseInt(br.readLine());
-        permutation = new int[n];
-        result = new int[n-1];
-        operators = new ArrayList<>(); // 0 : +, 1 : -, 2 : *, 3 : %
-        visitedOperator = new boolean[n-1];
+        permutation = new int[n]; // 숫자를 담을 순열
+        result = new int[n-1]; // 연산자 백트래킹 결과
+        operators = new ArrayList<>(); // 연산자를 순서대로 모아놓음 (0 : +, 1 : -, 2 : *, 3 : %)
+        visitedOperator = new boolean[n-1]; // 백트래킹 방문 여부 검사
 
         StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
