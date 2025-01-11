@@ -1,47 +1,47 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 public class Main {
 
+    static int[] result;
     static boolean[] visited;
+    static int n, m;
 
-    static void combination(int[] arr, int index, int m) {
-        if(m == 0) {
-            for (int i = 0; i < arr.length; i++) {
-                if(visited[i]) System.out.print(arr[i] + " ");
+    /**
+     * @param parent 현재 부모 노드
+     * @param index 현재 수열 result의 index
+     */
+    static void solution(int parent, int index) {
+        if(index == m) {
+            for (int i : result) {
+                System.out.print(i + " ");
             }
             System.out.println();
             return ;
         }
 
-        if(index != arr.length) {
-            visited[index] = true;
-            combination(arr, index+1, m-1);
+        for (int i = parent; i < n; i++) {
+            if(!visited[i]) {
+                visited[i] = true;
+                result[index] = i + 1;
+                solution(i + 1, index + 1);
 
-            visited[index] = false;
-            combination(arr,index+1, m);
+                visited[i] = false;
+            }
         }
     }
 
-
-
     public static void main(String[] args) throws IOException {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
-
-        int[] arr = new int[n];
-        for (int i = 0; i < n; i++) {
-            arr[i] = i+1;
-        }
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
 
         visited = new boolean[n];
+        result = new int[m];
 
-        combination(arr,0, m);
+        solution(0, 0);
+
     }
 }
