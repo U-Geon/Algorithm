@@ -1,39 +1,35 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
 
-    static int[] arr;
-    static int[] dp;
-
-    static int solution(int n) {
-        // C(1) = 6
-        // C(2) = 16
-        // C(3) = 6 + 10 or 6 + 13 or 10 + 13
-        // C(N) = max(arr(n) + arr(n-1) + C(n-3), arr(n) + C(n-2), C(n-1))
-
-        dp[0] = 0;
-        dp[1] = arr[1];
-        dp[2] = arr[1] + arr[2];
-
-        for (int i = 3; i <= n; i++) {
-            dp[i] = Math.max(Math.max(arr[i] + arr[i-1] + dp[i-3], arr[i] + dp[i-2]), dp[i-1]);
+    // 연속으로 놓여있는 3잔을 마실 수 없다.
+    // P(N) = P(N-1) + 막잔 & P(N-2) + 막잔 & P(n-1)
+    // arr(n) + arr(n-1) + C(n-3), arr(n) + C(n-2), C(n-1)
+    static int solution(int n, int[] dp, int[] arr) {
+        for(int i = 3; i < n; i++) {
+            dp[i] = Math.max(arr[i] + arr[i-1] + dp[i-3], Math.max(arr[i] + dp[i-2], dp[i-1]));
         }
 
-        return Arrays.stream(dp).max().getAsInt();
+        return dp[n-1];
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int n = Integer.parseInt(br.readLine());
-        arr = new int[10001];
-        dp = new int[10001];
 
-        for (int i = 1; i <= n; i++) {
+        int[] arr = new int[10001];
+        int[] dp = new int[10001];
+
+        for(int i = 0; i < n; i++) {
             arr[i] = Integer.parseInt(br.readLine());
         }
 
-        System.out.println(solution(n));
+        dp[0] = arr[0];
+        dp[1] = arr[0] + arr[1];
+        dp[2] = Math.max(Math.max(arr[0] + arr[2], arr[0] + arr[1]), arr[1] + arr[2]);
+
+        System.out.println(solution(n, dp, arr));
     }
 }
