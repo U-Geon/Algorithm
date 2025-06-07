@@ -1,48 +1,43 @@
 import java.io.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
 
-    static int[][][] arr;
+    static int[][][] dp;
 
-    static int solution(int a, int b, int c) {
-        if(a == 0 || b == 0 || c == 0) return 1;
-        if(arr[a][b][c] > 1) return arr[a][b][c];
+    static int solve(int a, int b, int c) {
+        if(a <= 0 || b <= 0 || c <= 0) return 1;
+        else if(a > 20 || b > 20 || c > 20) return solve(20,20,20);
+        if(dp[a][b][c] != 0) return dp[a][b][c];
 
-        if(a < b && b < c) arr[a][b][c] = solution(a, b, c-1) + solution(a, b-1, c-1) - solution(a, b-1, c);
-        else arr[a][b][c] = solution(a-1,b,c) + solution(a-1, b-1, c) + solution(a-1, b, c-1) - solution(a-1, b-1, c-1);
+        if(a < b && b < c) {
+            dp[a][b][c] = solve(a, b, c-1) + solve(a, b-1, c-1) - solve(a, b-1, c);
+        } else {
+            dp[a][b][c] = solve(a-1, b, c) + solve(a-1, b-1, c) + solve(a-1,b,c-1) - solve(a-1,b-1,c-1);
+        }
+        return dp[a][b][c];
+    }
 
-        return arr[a][b][c];
+    static String wrapper(int a, int b, int c, int result) {
+        return "w(" + a + ", " + b + ", " + c + ") = " + result;
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
 
-        arr = new int[21][21][21];
-        for (int i = 0; i <= 20; i++) {
-            for (int j = 0; j <= 20; j++) {
-                for (int k = 0; k <= 20; k++) {
-                    arr[i][j][k] = 1;
-                }
-            }
-        }
+        dp = new int[21][21][21];
 
         while(true) {
-            String line = br.readLine().strip();
-            if(line.equals("-1 -1 -1")) break;
 
-            StringTokenizer st = new StringTokenizer(line);
+            st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
             int c = Integer.parseInt(st.nextToken());
+            if(a == -1 && b == -1 && c == -1) break;
 
-            int result;
+            System.out.println(wrapper(a,b,c,solve(a,b,c)));
 
-            if(a <= 0 || b <=0 || c <= 0) result = 1;
-            else if(a > 20 || b > 20 || c > 20) result = solution(20, 20, 20);
-            else result = solution(a, b, c);
-
-            System.out.printf("w(%d, %d, %d) = %d\n", a, b, c, result);
         }
 
     }
