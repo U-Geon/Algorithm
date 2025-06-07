@@ -3,27 +3,22 @@ import java.util.*;
 
 public class Main {
 
-    static int[] permutation;
     static boolean[] visited;
+    static int n, m;
 
-    static void solution(int n, int m, int index) {
-
+    // 1 2
+    //   3
+    //   4
+    static void solve(String str, int index) {
         if(index == m) {
-            for (int i : permutation) {
-                System.out.print(i + " ");
-            }
-            System.out.println();
+            System.out.println(str);
             return ;
         }
 
-        for (int i = 0; i < n; i++) {
-            // 만약 해당 노드를 방문하지 않았다면?
-            if (!visited[i]) {
+        for(int i = 0; i < n; i++) {
+            if(!visited[i]) {
                 visited[i] = true;
-                permutation[index] = i + 1;
-                solution(n, m, index + 1);
-
-                // 자식 노드 방문이 끝나고 돌아오면 방문 노드를 방문하지 않은 상태로 변경
+                solve(str + (i+1) + " ", index + 1);
                 visited[i] = false;
             }
         }
@@ -31,14 +26,14 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringTokenizer st;
 
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
+        st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
 
-        permutation = new int[m];
         visited = new boolean[n];
 
-        solution(n, m, 0);
+        solve("", 0);
     }
 }
